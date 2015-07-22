@@ -1,0 +1,8 @@
+applications:
+- disk_quota: 1024M
+  host: pythonmongohellogalaxy
+  name: Python Mongo Hello Galaxy
+  path:	.
+  domain: stage1.mybluemix.net
+  instances: 1
+  memory: 128M
