@@ -32,6 +32,8 @@ CloudFoundry CLI -  Used to push the application to Bluemix.
 	
  * Step 2: Push application to Bluemix using CloudFoundry CLI.
 
+Tip: Run cf push from the src directory in this project.
+
 ###Option 2: Run locally
 
 ####Requirements:

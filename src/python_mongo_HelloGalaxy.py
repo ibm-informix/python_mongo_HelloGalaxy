@@ -68,15 +68,15 @@ def parseVCAP():
     global database
     global url
     
-    altadb = json.loads(os.environ['VCAP_SERVICES'])['altadb-dev'][0]
-    credentials = altadb['credentials']
+    tsdb = json.loads(os.environ['VCAP_SERVICES'])['timeseriesdatabase'][0]
+    credentials = tsdb['credentials']
     database = credentials['db']
       
     ssl = False
     if ssl == True:
-        url = credentials['ssl_json_url']
+        url = credentials['mongodb_url_ssl']
     else:
-        url = credentials['json_url']
+        url = credentials['mongodb_url']
         
 
 def doEverything():
