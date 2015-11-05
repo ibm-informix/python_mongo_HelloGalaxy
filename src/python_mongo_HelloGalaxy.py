@@ -34,6 +34,7 @@
 # 9 Drop a collection
 
 from pymongo.mongo_client import MongoClient
+import logging
 import json
 import os
 from flask import Flask, render_template
@@ -218,33 +219,32 @@ def doEverything():
     commands.append( db.collection_names())
     
     #SQL Passthrough
-#     commands.append("\n#6 SQL passthrough")
-#     sql = db["system.sql"]
-#     query = {"$sql": "create table town (name varchar(255), countryCode int)"}
-#     for doc in sql.find(query):
-#         commands.append(doc)
-#     
-#     query = {"$sql": "insert into town values ('Lawrence', 1)"}
-#     for doc in sql.find(query):
-#         commands.append(doc)
-#     
-#     query = {"$sql": "drop table town"}
-#     for doc in sql.find(query):
-#         commands.append(doc)
+    commands.append("\n#6 SQL passthrough")
+    sql = db["system.sql"]
+    query = {"$sql": "create table town (name varchar(255), countryCode int)"}
+    for doc in sql.find(query):
+        commands.append(doc)
+    
+    query = {"$sql": "insert into town values ('Lawrence', 1)"}
+    for doc in sql.find(query):
+        commands.append(doc)
+    
+    query = {"$sql": "drop table town"}
+    for doc in sql.find(query):
+        commands.append(doc)
     
     #Transactions
-#     commands.append("\n#7 Transactions")
-#     db.command({"transaction": "enable"})
-#     collection.insert(sydney.toJSON())
-#     db.command({"transaction": "commit"})
-#       
-#     collection.insert(melbourne.toJSON())
-#     db.command({"transaction": "rollback"})
-#     db.command({"transaction": "disable"})
-#     
-#     for doc in collection.find():
-#         commands.append(doc)
-#     
+    commands.append("\n#7 Transactions")
+    db.command({"transaction": "enable"})
+    collection.insert(sydney.toJSON())
+    db.command({"transaction": "commit"})
+      
+    collection.insert(melbourne.toJSON())
+    db.command({"transaction": "rollback"})
+    db.command({"transaction": "disable"})
+    
+    for doc in collection.find():
+        commands.append(doc)
     
     commands.append("\n#8 Commands")
     
@@ -283,8 +283,15 @@ def displayPage():
 
 @app.route("/databasetest")
 def printCommands():
-    parseVCAP()
-    commands = doEverything()
+    commands = []
+    try:
+        parseVCAP()
+        commands = doEverything()
+    except Exception as e:
+        logging.exception(e) 
+        commands.append("EXCEPTION: " + str(e))
+        commands.append("See log for details")
+
     return render_template('tests.html', commands=commands)
 
 if (__name__ == "__main__"):
