@@ -5,8 +5,8 @@
 <title>Informix Database</title>
 </head>
 <body>
-{% for command in commands %}
-    <li>{{ command }} </li>
+{% for line in output %}
+    <li>{{ line }} </li>
 {% endfor %}
 </body>
 </html>
